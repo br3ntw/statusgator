@@ -1,337 +1,509 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Foundation Academy – System Status</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Mono:wght@500&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Mono:wght@500&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/lucide@latest"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Mono:wght@500&display=swap');
 
-:root {
-  --bg: #080e1a;
-  --panel: #0e1726;
-  --border: #1a2740;
-  --border-bright: #243352;
-  --text: #e8f0fe;
-  --muted: #6b7fa3;
-  --green: #22c55e;
-  --green-bg: rgba(34,197,94,.1);
-  --green-text: #86efac;
-  --yellow: #f59e0b;
-  --yellow-bg: rgba(245,158,11,.1);
-  --yellow-text: #fcd34d;
-  --red: #ef4444;
-  --red-bg: rgba(239,68,68,.1);
-  --red-text: #fca5a5;
-  --blue: #3b82f6;
-}
+    :root {
+      --bg: #080e1a;
+      --panel: #0e1726;
+      --border: #1a2740;
+      --border-bright: #243352;
+      --text: #e8f0fe;
+      --muted: #6b7fa3;
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
+      --green: #22c55e;
+      --green-bg: rgba(34,197,94,.1);
+      --green-text: #86efac;
+      --green-glow: rgba(34,197,94,.35);
 
-html, body {
-  width: 1920px;
-  height: 1080px;
-  overflow: hidden;
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'DM Sans', sans-serif;
-}
+      --yellow: #f59e0b;
+      --yellow-bg: rgba(245,158,11,.1);
+      --yellow-text: #fcd34d;
+      --yellow-glow: rgba(245,158,11,.35);
 
-.app {
-  display: flex;
-  flex-direction: column;
-  height: 1080px;
-  padding: 32px 40px 28px;
-  gap: 24px;
-}
+      --red: #ef4444;
+      --red-bg: rgba(239,68,68,.1);
+      --red-text: #fca5a5;
+      --red-glow: rgba(239,68,68,.35);
 
-/* TOPBAR */
-.topbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-shrink: 0;
-  border-bottom: 1px solid var(--border);
-  padding-bottom: 20px;
-}
+      --blue: #3b82f6;
+      --blue-glow: rgba(59,130,246,.35);
+    }
 
-.eyebrow {
-  font-family: 'DM Mono', monospace;
-  font-size: 13px;
-  letter-spacing: .2em;
-  color: var(--blue);
-  margin-bottom: 4px;
-}
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-h1 {
-  font-size: 38px;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  line-height: 1;
-}
+    html, body {
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+    }
 
-.topbar-center {
-  font-size: 26px;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-}
+    body {
+      background:
+        radial-gradient(circle at top left, rgba(59,130,246,.08), transparent 28%),
+        radial-gradient(circle at bottom right, rgba(34,197,94,.05), transparent 25%),
+        var(--bg);
+    }
 
-.topbar-center.status-up    { color: var(--green-text); }
-.topbar-center.status-warn  { color: var(--yellow-text); }
-.topbar-center.status-down  { color: var(--red-text); }
+    .app {
+      display: flex;
+      flex-direction: column;
+      height: 1080px;
+      padding: 32px 40px 28px;
+      gap: 24px;
+    }
 
-.topbar-right {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 6px;
-}
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 20px;
+    }
 
-.live-indicator {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
+    .eyebrow {
+      font-family: 'DM Mono', monospace;
+      font-size: 13px;
+      letter-spacing: .2em;
+      color: var(--blue);
+      margin-bottom: 4px;
+    }
 
-.live-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: var(--green);
-  box-shadow: 0 0 0 0 rgba(34,197,94,.5);
-  animation: pulse 2s infinite;
-}
+    h1 {
+      font-size: 38px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1;
+    }
 
-@keyframes pulse {
-  0%   { box-shadow: 0 0 0 0 rgba(34,197,94,.5); }
-  70%  { box-shadow: 0 0 0 10px rgba(34,197,94,0); }
-  100% { box-shadow: 0 0 0 0 rgba(34,197,94,0); }
-}
+    .topbar-center {
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      min-width: 420px;
+      display: flex;
+      justify-content: center;
+    }
 
-.live-label {
-  font-family: 'DM Mono', monospace;
-  font-size: 13px;
-  letter-spacing: .15em;
-  color: var(--green);
-  font-weight: 500;
-}
+    .overall-status-wrap {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+    }
 
-#lastUpdated {
-  font-family: 'DM Mono', monospace;
-  font-size: 13px;
-  color: var(--muted);
-}
+    .overall-status-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
 
-/* GRID */
-.services-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(5, 1fr);
-  gap: 14px;
-  flex: 1;
-  min-height: 0;
-}
+    .overall-status-icon svg {
+      width: 30px;
+      height: 30px;
+      stroke-width: 2.4;
+    }
 
-/* CARD */
-.service-card {
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 20px 24px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  transition: border-color .2s;
-  position: relative;
-  overflow: hidden;
-}
+    .topbar-center.status-up {
+      color: var(--green-text);
+    }
 
-.service-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 3px;
-  border-radius: 16px 16px 0 0;
-  opacity: 0;
-  transition: opacity .2s;
-}
+    .topbar-center.status-up .overall-status-icon svg {
+      color: var(--green);
+      filter: drop-shadow(0 0 8px var(--green-glow));
+    }
 
-.service-card.card-up::before    { background: var(--green); opacity: 1; }
-.service-card.card-warn::before  { background: var(--yellow); opacity: 1; }
-.service-card.card-down::before  { background: var(--red); opacity: 1; }
+    .topbar-center.status-warn {
+      color: var(--yellow-text);
+    }
 
-.service-card.card-up   { border-color: rgba(34,197,94,.2); }
-.service-card.card-warn { border-color: rgba(245,158,11,.25); }
-.service-card.card-down { border-color: rgba(239,68,68,.3); }
+    .topbar-center.status-warn .overall-status-icon svg {
+      color: var(--yellow);
+      filter: drop-shadow(0 0 12px var(--yellow-glow));
+      animation: warnPulse 1.6s ease-in-out infinite;
+    }
 
-.card-top {
-  display: flex;
-  align-items: center;
-  transform: scale(1.2);
-  margin-left: 50px;
-  gap: 12px;
-}
+    .topbar-center.status-down {
+      color: var(--red-text);
+    }
 
-.card-icon {
-  width: 36px;
-  height: 36px;
-  border-radius: 8px;
-  object-fit: contain;
-  flex-shrink: 0;
-}
+    .topbar-center.status-down .overall-status-icon svg {
+      color: var(--red);
+      filter: drop-shadow(0 0 12px var(--red-glow));
+      animation: downPulse 1.1s ease-in-out infinite;
+    }
 
-.service-name {
-  font-size: 20px;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  line-height: 1.2;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
+    .topbar-center.status-maintenance {
+      color: #93c5fd;
+    }
 
-.card-bottom {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 12px;
-}
+    .topbar-center.status-maintenance .overall-status-icon svg {
+      color: var(--blue);
+      filter: drop-shadow(0 0 10px var(--blue-glow));
+    }
 
-.checked-time {
-  font-family: 'DM Mono', monospace;
-  font-size: 12px;
-  color: var(--muted);
-}
+    .topbar-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 6px;
+    }
 
-.badge {
-  border-radius: 999px;
-  font-weight: 700;
-  font-size: 13px;
-  padding: 6px 14px;
-  font-family: 'DM Sans', sans-serif;
-  letter-spacing: .02em;
-}
+    .live-indicator {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
 
-.badge-up   { background: var(--green-bg);  color: var(--green-text); }
-.badge-warn { background: var(--yellow-bg); color: var(--yellow-text); }
-.badge-down { background: var(--red-bg);    color: var(--red-text); }
+    .live-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 0 0 rgba(34,197,94,.5);
+      animation: pulse 2s infinite;
+    }
+
+    .live-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 13px;
+      letter-spacing: .15em;
+      color: var(--green);
+      font-weight: 500;
+    }
+
+    #lastUpdated {
+      font-family: 'DM Mono', monospace;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(5, 1fr);
+      gap: 14px;
+      flex: 1;
+      min-height: 0;
+    }
+
+    .service-card {
+      background: linear-gradient(180deg, rgba(14,23,38,.98), rgba(11,18,31,.98));
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: border-color .2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      border-radius: 16px 16px 0 0;
+      opacity: 1;
+    }
+
+    .service-card.card-up::before { background: var(--green); }
+    .service-card.card-warn::before { background: var(--yellow); }
+    .service-card.card-down::before { background: var(--red); }
+    .service-card.card-maintenance::before { background: var(--blue); }
+
+    .service-card.card-up { border-color: rgba(34,197,94,.2); }
+    .service-card.card-warn { border-color: rgba(245,158,11,.25); }
+    .service-card.card-down { border-color: rgba(239,68,68,.3); }
+    .service-card.card-maintenance { border-color: rgba(59,130,246,.28); }
+
+    .card-top {
+      display: flex;
+      align-items: center;
+      transform: scale(1.2);
+      margin-left: 50px;
+      gap: 12px;
+    }
+
+    .card-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      object-fit: contain;
+      flex-shrink: 0;
+    }
+
+    .service-name {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .card-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 12px;
+    }
+
+    .checked-time {
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .status-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .status-icon svg {
+      width: 28px;
+      height: 28px;
+      stroke-width: 2.4;
+    }
+
+    .status-icon.up {
+      background: var(--green-bg);
+    }
+
+    .status-icon.up svg {
+      color: var(--green);
+      filter: drop-shadow(0 0 6px var(--green-glow));
+    }
+
+    .status-icon.warn {
+      background: var(--yellow-bg);
+    }
+
+    .status-icon.warn svg {
+      color: var(--yellow);
+      filter: drop-shadow(0 0 10px var(--yellow-glow));
+      animation: warnPulse 1.6s ease-in-out infinite;
+    }
+
+    .status-icon.down {
+      background: var(--red-bg);
+    }
+
+    .status-icon.down svg {
+      color: var(--red);
+      filter: drop-shadow(0 0 12px var(--red-glow));
+      animation: downPulse 1.1s ease-in-out infinite;
+    }
+
+    .status-icon.maintenance {
+      background: rgba(59,130,246,.12);
+    }
+
+    .status-icon.maintenance svg {
+      color: var(--blue);
+      filter: drop-shadow(0 0 10px var(--blue-glow));
+    }
+
+    @keyframes pulse {
+      0%   { box-shadow: 0 0 0 0 rgba(34,197,94,.5); }
+      70%  { box-shadow: 0 0 0 10px rgba(34,197,94,0); }
+      100% { box-shadow: 0 0 0 0 rgba(34,197,94,0); }
+    }
+
+    @keyframes warnPulse {
+      0%,100% { transform: scale(1); }
+      50% { transform: scale(1.15); }
+    }
+
+    @keyframes downPulse {
+      0%,100% { transform: scale(1); }
+      40% { transform: scale(1.18); }
+      70% { transform: scale(.95); }
+    }
   </style>
 </head>
 <body>
   <div class="app">
-  <header class="topbar">
-    <div class="topbar-left">
-      <p class="eyebrow">FOUNDATION ACADEMY</p>
-      <h1>System Status</h1>
-    </div>
-    <div class="topbar-center" id="overallBanner">
-      <span id="overallStatusText">Loading...</span>
-    </div>
-    <div class="topbar-right">
-      <div class="live-indicator">
-        <span class="live-dot"></span>
-        <span class="live-label">LIVE</span>
+    <header class="topbar">
+      <div class="topbar-left">
+        <p class="eyebrow">FOUNDATION ACADEMY</p>
+        <h1>System Status</h1>
       </div>
-      <span id="lastUpdated">—</span>
-    </div>
-  </header>
-  <main class="dashboard">
-    <div class="services-grid" id="servicesGrid"></div>
-  </main>
-</div>
+
+      <div class="topbar-center" id="overallBanner">
+        <span class="overall-status-wrap">
+          <span class="overall-status-icon" id="overallStatusIcon"></span>
+          <span id="overallStatusText">Loading...</span>
+        </span>
+      </div>
+
+      <div class="topbar-right">
+        <div class="live-indicator">
+          <span class="live-dot"></span>
+          <span class="live-label">LIVE</span>
+        </div>
+        <span id="lastUpdated">—</span>
+      </div>
+    </header>
+
+    <main class="dashboard">
+      <div class="services-grid" id="servicesGrid"></div>
+    </main>
+  </div>
+
   <script>
     const BOARD_ID = "JxCsaEBgzn";
-const GROUP_ID = "UsALWZg9DA";
-const API_URL = `https://statusgator.brent-workinger.workers.dev/boards/${BOARD_ID}/monitors`;
+    const GROUP_ID = "UsALWZg9DA";
+    const API_URL = `https://statusgator.brent-workinger.workers.dev/boards/${BOARD_ID}/monitors`;
 
-function cardClass(status) {
-  if (status === "up") return "card-up";
-  if (status === "warn" || status === "maintenance") return "card-warn";
-  return "card-down";
-}
+    function cardClass(status) {
+      if (status === "up") return "card-up";
+      if (status === "warn") return "card-warn";
+      if (status === "maintenance") return "card-maintenance";
+      return "card-down";
+    }
 
-function badgeClass(status) {
-  if (status === "up") return "badge-up";
-  if (status === "warn" || status === "maintenance") return "badge-warn";
-  return "badge-down";
-}
+    function iconForStatus(status) {
+      if (status === "up") return "thumbs-up";
+      if (status === "warn") return "alert-triangle";
+      if (status === "maintenance") return "wrench";
+      if (status === "down") return "x-circle";
+      return "help-circle";
+    }
 
-function statusLabel(status) {
-  if (status === "up") return "Operational";
-  if (status === "warn") return "Degraded";
-  if (status === "maintenance") return "Maintenance";
-  if (status === "down") return "Outage";
-  return "Unknown";
-}
+    function overallIcon(status) {
+      if (status === "up") return "thumbs-up";
+      if (status === "warn") return "alert-triangle";
+      if (status === "maintenance") return "wrench";
+      if (status === "down") return "x-circle";
+      return "help-circle";
+    }
 
-function formatTime(iso) {
-  if (!iso) return "";
-  return new Date(iso).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-}
+    function formatTime(iso) {
+      if (!iso) return "";
+      return new Date(iso).toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit"
+      });
+    }
 
-function renderServices(services) {
-  document.getElementById("servicesGrid").innerHTML = services.map(s => `
-    <div class="service-card ${cardClass(s.status)}">
-      <div class="card-top">
-        ${s.iconUrl ? `<img class="card-icon" src="${s.iconUrl}" onerror="this.style.display='none'">` : ""}
-        <span class="service-name">${s.name}</span>
-      </div>
-      <div class="card-bottom">
-        <span class="checked-time">${s.checkedAt ? formatTime(s.checkedAt) : ""}</span>
-        <span class="badge ${badgeClass(s.status)}">${statusLabel(s.status)}</span>
-      </div>
-    </div>
-  `).join("");
-}
+    function renderServices(services) {
+      document.getElementById("servicesGrid").innerHTML = services.map(s => `
+        <div class="service-card ${cardClass(s.status)}">
+          <div class="card-top">
+            ${s.iconUrl ? `<img class="card-icon" src="${s.iconUrl}" onerror="this.style.display='none'">` : ""}
+            <span class="service-name">${s.name}</span>
+          </div>
+          <div class="card-bottom">
+            <span class="checked-time">${s.checkedAt ? formatTime(s.checkedAt) : ""}</span>
+            <span class="status-icon ${s.status}">
+              <i data-lucide="${iconForStatus(s.status)}"></i>
+            </span>
+          </div>
+        </div>
+      `).join("");
 
-function updateOverall(worst) {
-  const el = document.getElementById("overallStatusText");
-  const banner = document.getElementById("overallBanner");
-  banner.className = "";
-  if (worst === "up") {
-    el.textContent = "✓ All Systems Operational";
-    banner.classList.add("topbar-center", "status-up");
-  } else if (worst === "warn" || worst === "maintenance") {
-    el.textContent = "⚠ Degraded Performance";
-    banner.classList.add("topbar-center", "status-warn");
-  } else {
-    el.textContent = "✕ Service Disruption";
-    banner.classList.add("topbar-center", "status-down");
-  }
-}
+      lucide.createIcons();
+    }
 
-async function fetchStatus() {
-  try {
-    const res = await fetch(API_URL, {
-      headers: { Accept: "application/json" }
-    });
-    const result = await res.json();
-    if (!result.success) return;
+    function updateOverall(worst) {
+      const textEl = document.getElementById("overallStatusText");
+      const iconEl = document.getElementById("overallStatusIcon");
+      const banner = document.getElementById("overallBanner");
 
-    const monitors = result.data.filter(m => m.group && m.group.id == GROUP_ID);
-    const services = monitors.map(m => ({
-      name: m.display_name,
-      status: m.filtered_status || "unknown",
-      iconUrl: m.icon_url || "",
-      checkedAt: m.checked_at
-    }));
+      banner.className = "topbar-center";
 
-    const priority = { down: 3, warn: 2, maintenance: 1, up: 0, unknown: 0 };
-    const worst = services.reduce((acc, s) =>
-      (priority[s.status] || 0) > (priority[acc] || 0) ? s.status : acc, "up");
+      if (worst === "up") {
+        textEl.textContent = "All Systems Operational";
+        iconEl.innerHTML = `<i data-lucide="${overallIcon("up")}"></i>`;
+        banner.classList.add("status-up");
+      } else if (worst === "warn") {
+        textEl.textContent = "Degraded Performance";
+        iconEl.innerHTML = `<i data-lucide="${overallIcon("warn")}"></i>`;
+        banner.classList.add("status-warn");
+      } else if (worst === "maintenance") {
+        textEl.textContent = "Scheduled Maintenance";
+        iconEl.innerHTML = `<i data-lucide="${overallIcon("maintenance")}"></i>`;
+        banner.classList.add("status-maintenance");
+      } else {
+        textEl.textContent = "Service Disruption";
+        iconEl.innerHTML = `<i data-lucide="${overallIcon("down")}"></i>`;
+        banner.classList.add("status-down");
+      }
 
-    renderServices(services);
-    updateOverall(worst);
-    document.getElementById("lastUpdated").textContent =
-      "Updated " + new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-  } catch (err) {
-    console.error(err);
-  }
-}
+      lucide.createIcons();
+    }
 
-fetchStatus();
-setInterval(fetchStatus, 180000);
+    async function fetchStatus() {
+      try {
+        const res = await fetch(API_URL, {
+          headers: { Accept: "application/json" }
+        });
+
+        const result = await res.json();
+        if (!result.success) return;
+
+        const monitors = result.data.filter(m => m.group && m.group.id == GROUP_ID);
+
+        const services = monitors.map(m => ({
+          name: m.display_name,
+          status: m.filtered_status || "unknown",
+          iconUrl: m.icon_url || "",
+          checkedAt: m.checked_at
+        }));
+
+        const priority = {
+          down: 4,
+          warn: 3,
+          maintenance: 2,
+          up: 1,
+          unknown: 0
+        };
+
+        const worst = services.reduce((acc, s) =>
+          (priority[s.status] || 0) > (priority[acc] || 0) ? s.status : acc,
+          "up"
+        );
+
+        renderServices(services);
+        updateOverall(worst);
+
+        document.getElementById("lastUpdated").textContent =
+          "Updated " + new Date().toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit"
+          });
+
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    fetchStatus();
+    setInterval(fetchStatus, 60000);
   </script>
 </body>
 </html>
